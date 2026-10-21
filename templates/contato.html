@@ -1,71 +1,66 @@
+{% extends "base.html" %} {% block title %}Contato{% endblock %} {% block
+content %}
+<h1>Contato</h1>
+<p>Preencha os campos abaixo.</p>
 
-{% extends "base.html" %}
+{% if enviado %}
+<div class="mensagem">
+  <h2>Contato cadastrado!</h2>
+  <p>Olá, {{ nome }}!</p>
+  <p>Seu e-mail é {{ email }}.</p>
+</div>
+{% endif %} {% if erro %}
+<p class="erro">{{ erro }}</p>
+{% endif %}
 
-{% block title %}Contato{% endblock %}
+<form action="{{ url_for('contato') }}" method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
 
-{% block content %}
-    <h1>Contato</h1>
-    <p>Preencha os campos abaixo.</p>
+  <label for="nome">Seu nome:</label>
+  <input type="text" id="nome" name="nome" required />
 
-    {% if enviado %}
-        <div class="mensagem">
-            <h2>Contato cadastrado!</h2>
-            <p>Olá, {{ nome }}!</p>
-            <p>Seu e-mail é {{ email }}.</p>
-        </div>
-    {% endif %}
+  <label for="email">Seu e-mail:</label>
+  <input type="email" id="email" name="email" required />
 
-    {% if erro %}
-        <p class="erro">{{ erro }}</p>
-    {% endif %}
+  <button type="submit">Cadastrar contato</button>
+</form>
 
-    <form action="{{ url_for('contato') }}" method="POST">
-        <label for="nome">Seu nome:</label>
-        <input type="text" id="nome" name="nome" value="{{ nome }}" required>
+<hr />
 
-        <br><br>
+<h2>Contatos cadastrados</h2>
 
-        <label for="email">Seu e-mail:</label>
-        <input type="email" id="email" name="email" value="{{ email }}" required>
+{% if contatos %}
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>E-mail</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
 
-        <br><br>
+  <tbody>
+    {% for contato in contatos %}
+    <tr>
+      <td>{{ contato["id"] }}</td>
+      <td>{{ contato["nome"] }}</td>
+      <td>{{ contato["email"] }}</td>
+      <td>
+        <a href="{{ url_for('editar_contato', id=contato['id']) }}">Editar</a>
 
-        <button type="submit">Cadastrar contato</button>
-    </form>
-
-    <hr>
-
-    <h2>Contatos cadastrados</h2>
-
-    {% if contatos %}
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>E-mail</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for contato in contatos %}
-                    <tr>
-                        <td>{{ contato["id"] }}</td>
-                        <td>{{ contato["nome"] }}</td>
-                        <td>{{ contato["email"] }}</td>
-                        <td>
-                            <a href="{{ url_for('editar_contato', id=contato['id']) }}">Editar</a>
-
-                            <form action="{{ url_for('excluir_contato', id=contato['id']) }}" method="POST">
-                                <button type="submit">Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>Nenhum contato cadastrado.</p>
-    {% endif %}
-{% endblock %}
+        <form
+          action="{{ url_for('excluir_contato', id=contato['id']) }}"
+          method="POST"
+        >
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <button type="submit">Excluir</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Nenhum contato cadastrado.</p>
+{% endif %} {% endblock %}

@@ -1,23 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Meu aplicativo Flask{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
     <header class="cabecalho">
-        <nav class="menu">
-            <a href="{{ url_for('inicio') }}">Início</a>
-            <a href="{{ url_for('sobre') }}">Sobre</a>
-            <a href="{{ url_for('contato') }}">Contato</a>
-            <a href="{{ url_for('ajuda') }}">Ajuda</a>
-        </nav>
+      <nav class="menu">
+        <a href="{{ url_for('inicio') }}">Início</a>
+        <a href="{{ url_for('sobre') }}">Sobre</a>
+        <a href="{{ url_for('contato') }}">Contato</a>
+        <a href="{{ url_for('ajuda') }}">Ajuda</a>
+
+        {% if session.get("usuario_id") %}
+        <a href="{{ url_for('painel') }}">Meu painel</a>
+
+        <form action="{{ url_for('sair') }}" method="POST" class="logout-form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <button type="submit">Sair</button>
+        </form>
+        {% else %}
+        <a href="{{ url_for('cadastro') }}">Cadastro</a>
+        <a href="{{ url_for('login') }}">Entrar</a>
+        {% endif %}
+      </nav>
     </header>
 
-    <main class="container">
-        {% block content %}{% endblock %}
-    </main>
-</body>
+    <main class="container">{% block content %}{% endblock %}</main>
+  </body>
 </html>

@@ -84,3 +84,7 @@ button:hover {
         padding: 16px;
     }
 }
+
+.logout-form {
+    margin: 0;
+}

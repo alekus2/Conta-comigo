@@ -10,6 +10,7 @@
     {% endif %}
 
     <form action="{{ url_for('editar_contato', id=contato_id) }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" value="{{ nome }}" required>
 

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Painel{% endblock %}
+
+{% block content %}
+    <h1>Meu painel</h1>
+
+    <p>Bem-vindo, {{ usuario["nome"] }}!</p>
+    <p>Seu e-mail cadastrado é {{ usuario["email"] }}.</p>
+
+    <p>Você está autenticado e conseguiu acessar a página privada.</p>
+{% endblock %}
